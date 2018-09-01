@@ -63,6 +63,7 @@ public class ApiCalls {
                 String info = tempNode.get("conversion").get("EUR").toString() + "€ \t";
                 info += tempNode.get("cityTo").toString() + ", " + tempNode.get("countryTo").get("name").toString();
                 //info += tempNode.get
+                info = info.replaceAll("\"", "");
                 System.out.println(info);
             }
         } catch (IOException e) { e.printStackTrace(); }
