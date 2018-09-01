@@ -1,0 +1,21 @@
+   flyFrom		string	required
+to			string	optional	anywhere
+   dateFrom		string	required dd/mm/YYYY
+   dateTo		string	required dd/mm/YYYY
+daysInDestinationFrom	integer	optional	1
+daysInDestinationTo	integer	optional 	14
+returnFrom		string	optional
+returnTo		string	optional
+maxFlyDuration		integer	optional in hours
+typeFlight		string	optional oneway/round
+oneforcity		boolean	optional cheapest only, if set to 1
+directFlights		boolean	optional	0
+   v			integer	required	3 (?)
+curr			string	optional EUR	dunno maybe EUR
+locale			string	optional en	dunno maybe en
+price_from		integer	optional
+price_to		integer	optional
+stopoverfrom		string	optional 48:00 means 48 hours
+stopoverto		string	optional
+limit			integer	optional max number of results is 200
+sort			string	optional quality/*price*/duration
