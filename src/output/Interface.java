@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -95,6 +96,40 @@ public class Interface extends Application {
                 grid.getChildren().add(searchBtn);
                 GridPane.setConstraints(searchBtn, 0, 5);
                 GridPane.setHalignment(searchBtn, HPos.RIGHT);
+
+                searchBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        String dateFromValue = dateFrom.getText();
+                        String dateToValue = dateTo.getText();
+
+                        //root Pane
+                        StackPane rootPane = new StackPane();
+                        rootPane.setPadding(new Insets(10));
+
+                        //new Scene
+                        Scene searchScene = new Scene(rootPane, 450, 350);
+                        stage.setScene(searchScene);
+
+                        //BorderPane to be able to set a Label centered at the top of the window
+                        BorderPane bPane = new BorderPane();
+
+                        GridPane searchGrid = new GridPane();
+                        searchGrid.setPadding(new Insets(10));
+                        searchGrid.setVgap(20);
+                        searchGrid.setHgap(20);
+
+                        //Label with destination
+                        Label destination = new Label("Madeira -> Europe");
+                        destination.setFont(Font.font("Verdana", FontWeight.BOLD, 22));
+                        bPane.setTop(destination);
+                        BorderPane.setAlignment(destination, Pos.CENTER);
+
+
+
+                        rootPane.getChildren().addAll(bPane, searchGrid);
+                    }
+                });
             }
         });
 
