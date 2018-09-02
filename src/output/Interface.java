@@ -1,4 +1,6 @@
 package output;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -22,7 +24,7 @@ public class Interface extends Application {
 
         StackPane root = new StackPane();
 
-        Scene introScene = new Scene(root, 310, 350);
+        Scene introScene = new Scene(root, 350, 350);
         introScene.setRoot(root);
         stage.setScene(introScene);
         stage.setTitle("KIWI APPLICATION TO SAVE MY LIFE");
@@ -39,6 +41,12 @@ public class Interface extends Application {
         stage.centerOnScreen();
         stage.show();
 
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
 
     }
 

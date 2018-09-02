@@ -14,17 +14,16 @@ public class ApiCalls {
     public static void main(String[] args) throws Exception {
         ApiCalls http = new ApiCalls();
 
-        System.out.println("Testing 1 - Send Http GET request");
         String json = http.sendGet();
-        http.printPrice(json);
+        http.printPrice(json, 3);
 
     }
 
     public String sendGet() throws Exception{
         String url = "https://api.skypicker.com/flights?";
-        url += "flyFrom=FNC&to=OPO&dateFrom=02/09/2018";
-        url += "&dateTo=03/09/2018&typeFlight=oneway&oneforcity=1";
-        url += "&directFlights=1&v=3";
+        url += "flyFrom=FNC&to=europe&dateFrom=03/09/2018";
+        url += "&dateTo=05/09/2018&typeFlight=oneway&oneforcity=1";
+        url += "&directFlights=1&v=3&limit=3";
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -46,26 +45,28 @@ public class ApiCalls {
         return response.toString();
     }
 
-    public void printPrice(String json){
+    public void printPrice(String json, int n_limit){
 
-            ObjectMapper objMapper = new ObjectMapper();
-            try{
-                JsonNode rootNode = objMapper.readTree(json);
+        ObjectMapper objMapper = new ObjectMapper();
+        try{
+            JsonNode rootNode = objMapper.readTree(json);
 
-                for(int i=0; i<1; i++)
-                {
-                    JsonNode tempNode = rootNode;
-                    switch (i)
-                    {
-                        case(0): String data = tempNode.get("data").toString();
-                                 data = data.substring(1, data.length()-1);
-                                 tempNode = objMapper.readTree(data);
-                                 System.out.println(tempNode.get("conversion").get("EUR").toString()); break;
+            JsonNode tempNode = rootNode;
+            tempNode = tempNode.get("data");
 
-                        default: break;
-                    }
-                }
-            } catch (IOException e) { e.printStackTrace(); }
+            //for searches with multiple results
+            for(int i=0; i<n_limit; i++)
+            {
+                tempNode = rootNode;
+                tempNode = tempNode.get("data");
+                tempNode = tempNode.get(i);
+                String info = tempNode.get("conversion").get("EUR").toString() + "€ \t";
+                info += tempNode.get("cityTo").toString() + ", " + tempNode.get("countryTo").get("name").toString();
+                //info += tempNode.get
+                info = info.replaceAll("\"", "");
+                System.out.println(info);
+            }
+        } catch (IOException e) { e.printStackTrace(); }
 
     }
 
