@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,8 +64,14 @@ public class ApiCalls {
                 tempNode = tempNode.get("data");
                 tempNode = tempNode.get(i);
                 String info = tempNode.get("conversion").get("EUR").toString() + "€ \t";
+
+                long dateUnix = Long.parseLong(tempNode.get("dTimeUTC").toString());
+                Date date = new Date (dateUnix * 1000);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                info += sdf.format(date) + "\t";
+
                 info += tempNode.get("cityTo").toString() + ", " + tempNode.get("countryTo").get("name").toString();
-                //info += tempNode.get
+
                 info = info.replaceAll("\"", "");
                 System.out.println(info);
             }
