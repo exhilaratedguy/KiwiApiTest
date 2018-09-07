@@ -24,8 +24,8 @@ public class ApiCalls {
 
     public String sendGet() throws Exception{
         String url = "https://api.skypicker.com/flights?";
-        url += "flyFrom=FNC&to=europe&dateFrom=03/09/2018";
-        url += "&dateTo=05/09/2018&typeFlight=oneway&oneforcity=1";
+        url += "flyFrom=FNC&to=europe&dateFrom=09/09/2018";
+        url += "&dateTo=15/09/2018&typeFlight=oneway&oneforcity=1";
         url += "&directFlights=1&v=3&limit=3";
 
         URL obj = new URL(url);
