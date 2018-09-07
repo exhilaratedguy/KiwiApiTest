@@ -18,34 +18,38 @@ public class ApiCalls {
         ApiCalls http = new ApiCalls();
 
         String json = http.sendGet();
-        http.printPrice(json, 3);
+        http.printPrice(json, 5);
 
     }
 
-    public String sendGet() throws Exception{
+    public String sendGet() {
         String url = "https://api.skypicker.com/flights?";
         url += "flyFrom=FNC&to=europe&dateFrom=09/09/2018";
         url += "&dateTo=15/09/2018&typeFlight=oneway&oneforcity=1";
-        url += "&directFlights=1&v=3&limit=3";
+        url += "&directFlights=0&v=3&limit=5";
 
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        int responseCode = con.getResponseCode();
-        System.out.println("\nSending GET request to URL: " + url);
-        System.out.println("Response code: " + responseCode);
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending GET request to URL: " + url);
+            System.out.println("Response code: " + responseCode);
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
-        while ( (inputLine = in.readLine()) != null ){
-            response.append(inputLine);
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            //System.out.println(response.toString());
+
+            return response.toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        in.close();
-        //System.out.println(response.toString());
-
-        return response.toString();
     }
 
     public void printPrice(String json, int n_limit){
@@ -77,6 +81,12 @@ public class ApiCalls {
             }
         } catch (IOException e) { e.printStackTrace(); }
 
+    }
+
+    public JsonNode rootNodeTree() throws IOException {
+        ObjectMapper objMapper = new ObjectMapper();
+        JsonNode rootNode = objMapper.readTree(sendGet());
+        return rootNode;
     }
 
     public String createSearchUrl(){

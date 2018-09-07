@@ -1,4 +1,5 @@
 package output;
+import com.fasterxml.jackson.databind.JsonNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -15,6 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import server.ApiCalls;
+
 import javax.swing.*;
 import java.io.IOException;
 
@@ -108,7 +111,7 @@ public class Interface extends Application {
                         rootPane.setPadding(new Insets(10));
 
                         //new Scene
-                        Scene searchScene = new Scene(rootPane, 450, 350);
+                        Scene searchScene = new Scene(rootPane, 650, 350);
                         stage.setScene(searchScene);
 
                         //BorderPane to be able to set a Label centered at the top of the window
@@ -124,6 +127,53 @@ public class Interface extends Application {
                         destination.setFont(Font.font("Verdana", FontWeight.BOLD, 22));
                         bPane.setTop(destination);
                         BorderPane.setAlignment(destination, Pos.CENTER);
+
+                        ApiCalls api = new ApiCalls();
+                        try {
+                            JsonNode rootNode = api.rootNodeTree();
+
+                            //Column labels with destination, cost, duration, date
+                            for (int i=0; i<4; i++)
+                            {
+                                // Destino | Custo | Duração | Data
+                                Label column = new Label();
+
+                                switch(i){
+                                    case 0: column.setText("Destino"); break;
+                                    case 1: column.setText("Custo"); break;
+                                    case 2: column.setText("Duração"); break;
+                                    case 3: column.setText("Data"); break;
+                                    default: break;
+                                }
+
+                                column.setFont(Font.font("Verdana", FontWeight.BLACK, 14));
+                                GridPane.setConstraints(column, i, 3);
+                                GridPane.setHalignment(column, HPos.CENTER);
+                                searchGrid.getChildren().add(column);
+                            }
+
+                            //Rows with each destination
+                            for(int i=0; i<5; i++)
+                            {
+                                Label text = new Label();
+
+                                String str = rootNode.get("data").get(i).get("cityTo").toString();
+                                str += ", " + rootNode.get("data").get(i).get("countryTo").get("name").toString();
+                                str = str.replaceAll("\"", "");
+
+                                text.setText(str);
+                                //text.setFont(Font.font("Verdana", FontWeight.BLACK, 14));
+                                GridPane.setConstraints(text, 0, i + 4);
+                                GridPane.setHalignment(text, HPos.CENTER);
+                                searchGrid.getChildren().add(text);
+
+                            }
+                        } catch (IOException e) { e.printStackTrace(); return; }
+
+
+
+
+
 
 
 
