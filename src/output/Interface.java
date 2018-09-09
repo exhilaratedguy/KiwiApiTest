@@ -20,6 +20,8 @@ import server.ApiCalls;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Interface extends Application {
 
@@ -155,17 +157,43 @@ public class Interface extends Application {
                             //Rows with each destination
                             for(int i=0; i<5; i++)
                             {
-                                Label text = new Label();
+                                JsonNode tempNode = rootNode.get("data").get(i);
 
-                                String str = rootNode.get("data").get(i).get("cityTo").toString();
-                                str += ", " + rootNode.get("data").get(i).get("countryTo").get("name").toString();
+                                //For each field in one row
+                                for(int j=0; j<4; j++)
+                                {
+                                    Label text = new Label();
+                                    String str = "";
+
+                                    switch(j){
+                                        case(0): str = tempNode.get("cityTo").toString() + ", " + tempNode.get("countryTo").get("name").toString();
+                                                 break;
+                                        case(1): str = tempNode.get("conversion").get("EUR").toString() + "€";
+                                                 break;
+                                        case(2): str = tempNode.get("fly_duration").toString();
+                                                 break;
+                                        case(3): long dateUnix = Long.parseLong(tempNode.get("dTimeUTC").toString());
+                                                 Date date = new Date (dateUnix * 1000);
+                                                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                                 str = sdf.format(date);
+                                                 break;
+                                        default: break;
+                                    }
+
+                                    str = str.replaceAll("\"", "");
+                                    text.setText(str);
+
+                                    //text.setFont(Font.font("Verdana", FontWeight.BLACK, 14));
+                                    GridPane.setConstraints(text, j, i + 4);
+                                    GridPane.setHalignment(text, HPos.CENTER);
+                                    searchGrid.getChildren().add(text);
+                                }
+
+                                String str = tempNode.get("cityTo").toString();
+                                str += ", " + tempNode.get("countryTo").get("name").toString();
                                 str = str.replaceAll("\"", "");
 
-                                text.setText(str);
-                                //text.setFont(Font.font("Verdana", FontWeight.BLACK, 14));
-                                GridPane.setConstraints(text, 0, i + 4);
-                                GridPane.setHalignment(text, HPos.CENTER);
-                                searchGrid.getChildren().add(text);
+
 
                             }
                         } catch (IOException e) { e.printStackTrace(); return; }
