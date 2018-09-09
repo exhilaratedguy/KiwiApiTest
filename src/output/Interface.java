@@ -131,8 +131,10 @@ public class Interface extends Application {
                         BorderPane.setAlignment(destination, Pos.CENTER);
 
                         ApiCalls api = new ApiCalls();
+                        String url = api.createSearchUrl(dateFrom.getText(), dateTo.getText(), directFlights.getText(), limit.getText());
+
                         try {
-                            JsonNode rootNode = api.rootNodeTree();
+                            JsonNode rootNode = api.rootNodeTree1(url);
 
                             //Column labels with destination, cost, duration, date
                             for (int i=0; i<4; i++)
@@ -153,6 +155,8 @@ public class Interface extends Application {
                                 GridPane.setHalignment(column, HPos.CENTER);
                                 searchGrid.getChildren().add(column);
                             }
+
+
 
                             //Rows with each destination
                             for(int i=0; i<5; i++)

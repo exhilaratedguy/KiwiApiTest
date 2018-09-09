@@ -52,6 +52,31 @@ public class ApiCalls {
         }
     }
 
+    public String sendGet1(String url) {
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending GET request to URL: " + url);
+            System.out.println("Response code: " + responseCode);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            System.out.println(response.toString());
+
+            return response.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     public void printPrice(String json, int n_limit){
 
         ObjectMapper objMapper = new ObjectMapper();
@@ -89,12 +114,20 @@ public class ApiCalls {
         return rootNode;
     }
 
-    public String createSearchUrl(){
-        String searchUrl="";
+    public JsonNode rootNodeTree1(String url) throws IOException {
+        ObjectMapper objMapper = new ObjectMapper();
+        JsonNode rootNode = objMapper.readTree(sendGet1(url));
+        return rootNode;
+    }
 
+    public String createSearchUrl(String dFrom, String dTo, String type, String max){
+        String url = "https://api.skypicker.com/flights?flyFrom=FNC&to=europe";
 
+        url += "&dateFrom=" + dFrom +"&dateTo=" + dTo;
+        url += "&typeFlight=oneway&oneforcity=1";
+        url += "&directFlights=" + type + "&v=3&limit=" + max;
 
-        return searchUrl;
+        return url;
     }
 
 }
