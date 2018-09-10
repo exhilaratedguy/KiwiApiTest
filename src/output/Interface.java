@@ -115,6 +115,7 @@ public class Interface extends Application {
                         //new Scene
                         Scene searchScene = new Scene(rootPane, 650, 350);
                         stage.setScene(searchScene);
+                        stage.centerOnScreen();
 
                         //BorderPane to be able to set a Label centered at the top of the window
                         BorderPane bPane = new BorderPane();
@@ -130,11 +131,13 @@ public class Interface extends Application {
                         bPane.setTop(destination);
                         BorderPane.setAlignment(destination, Pos.CENTER);
 
+                        int max = Integer.parseInt(limit.getText());
+
                         ApiCalls api = new ApiCalls();
-                        String url = api.createSearchUrl(dateFrom.getText(), dateTo.getText(), directFlights.getText(), limit.getText());
+                        String url = api.createSearchUrl(dateFrom.getText(), dateTo.getText(), directFlights.getText(), max);
 
                         try {
-                            JsonNode rootNode = api.rootNodeTree1(url);
+                            JsonNode rootNode = api.rootNodeTree(url);
 
                             //Column labels with destination, cost, duration, date
                             for (int i=0; i<4; i++)
@@ -159,7 +162,7 @@ public class Interface extends Application {
 
 
                             //Rows with each destination
-                            for(int i=0; i<5; i++)
+                            for(int i=0; i<max; i++)
                             {
                                 JsonNode tempNode = rootNode.get("data").get(i);
 

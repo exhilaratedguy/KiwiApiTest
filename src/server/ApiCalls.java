@@ -14,45 +14,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiCalls {
 
+    private static final String TESTURL = "https://api.skypicker.com/flights?flyFrom=FNC&to=europe&dateFrom=18/09/2018&dateTo=30/09/2018&typeFlight=oneway&oneforcity=1&directFlights=1&v=3&limit=5";
+
     public static void main(String[] args) throws Exception {
         ApiCalls http = new ApiCalls();
 
-        String json = http.sendGet();
+        String json = http.sendGet(TESTURL);
         http.printPrice(json, 5);
 
     }
 
-    public String sendGet() {
-        String url = "https://api.skypicker.com/flights?";
-        url += "flyFrom=FNC&to=europe&dateFrom=09/09/2018";
-        url += "&dateTo=15/09/2018&typeFlight=oneway&oneforcity=1";
-        url += "&directFlights=0&v=3&limit=5";
-
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            int responseCode = con.getResponseCode();
-            System.out.println("\nSending GET request to URL: " + url);
-            System.out.println("Response code: " + responseCode);
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            System.out.println(response.toString());
-
-            return response.toString();
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    public String sendGet1(String url) {
+    public String sendGet(String url) {
         try {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -108,19 +80,13 @@ public class ApiCalls {
 
     }
 
-    public JsonNode rootNodeTree() throws IOException {
+    public JsonNode rootNodeTree(String url) throws IOException {
         ObjectMapper objMapper = new ObjectMapper();
-        JsonNode rootNode = objMapper.readTree(sendGet());
+        JsonNode rootNode = objMapper.readTree(sendGet(url));
         return rootNode;
     }
 
-    public JsonNode rootNodeTree1(String url) throws IOException {
-        ObjectMapper objMapper = new ObjectMapper();
-        JsonNode rootNode = objMapper.readTree(sendGet1(url));
-        return rootNode;
-    }
-
-    public String createSearchUrl(String dFrom, String dTo, String type, String max){
+    public String createSearchUrl(String dFrom, String dTo, String type, int max){
         String url = "https://api.skypicker.com/flights?flyFrom=FNC&to=europe";
 
         url += "&dateFrom=" + dFrom +"&dateTo=" + dTo;
