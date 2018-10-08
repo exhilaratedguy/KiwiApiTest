@@ -1,5 +1,6 @@
 package output;
 import com.fasterxml.jackson.databind.JsonNode;
+import excel.WriteExcel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -105,8 +106,8 @@ public class Interface extends Application {
                 searchBtn.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        String dateFromValue = dateFrom.getText();
-                        String dateToValue = dateTo.getText();
+                        //String dateFromValue = dateFrom.getText();
+                        //String dateToValue = dateTo.getText();
 
                         //root Pane
                         StackPane rootPane = new StackPane();
@@ -199,12 +200,37 @@ public class Interface extends Application {
                                 String str = tempNode.get("cityTo").toString();
                                 str += ", " + tempNode.get("countryTo").get("name").toString();
                                 str = str.replaceAll("\"", "");
-
-
-
                             }
                         } catch (IOException e) { e.printStackTrace(); return; }
 
+                        //Button 'back'
+                        Button backBtn = new Button("Back");
+                        searchGrid.getChildren().add(backBtn);
+                        GridPane.setConstraints(backBtn, 0, max+5);
+                        GridPane.setHalignment(backBtn, HPos.LEFT);
+
+                        //Button 'Print year'
+                        Button printBtn = new Button("Print year");
+                        searchGrid.getChildren().add(printBtn);
+                        GridPane.setConstraints(printBtn, 4, max+5);
+                        GridPane.setHalignment(printBtn, HPos.RIGHT);
+
+                        printBtn.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                WriteExcel excel = new WriteExcel();
+                                excel.printYear(dateFrom.getText());
+
+                                JOptionPane.showMessageDialog(null, "Excel file created successfully.");
+                            }
+                        });
+
+                        backBtn.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                stage.setScene(paramScene);
+                            }
+                        });
 
 
 
